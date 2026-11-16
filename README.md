@@ -1,7 +1,7 @@
 # AI Photo Search — Frontend
 
 Static site hosted on S3 (B1). Backend lives in
-[cloud_assignment_3](https://github.com/happyananya/cloud_assignment_3).
+[cc_backend](https://github.com/happyananya/cc_backend).
 
 ## Setup
 
