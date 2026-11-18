@@ -10,5 +10,4 @@ Static site hosted on S3 (B1). Backend lives in
    `apigClient.js` and `lib/` into `sdk/`.
 3. Push to GitHub. Pipeline P2 deploys the repo to the frontend bucket.
 
-Search goes through the generated SDK (`apigClient.searchGet`). Upload uses `fetch`
-because the generated SDK corrupts binary request bodies.
+Search goes through the generated SDK (`apigClient.searchGet`). Upload uses `fetch`.
