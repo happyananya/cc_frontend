@@ -55,7 +55,22 @@ $("search-form").addEventListener("submit", async (e) => {
 // ---------- Upload: PUT /photos/{object} ----------
 // The generated SDK copies the request body as a plain object, which corrupts binary
 // files, so the upload goes through fetch against the same API (same API key).
-async function uploadPhoto(file, customLabels) {
+// Rekognition only reads JPEG and PNG, so other formats (AVIF, WebP, GIF, ...)
+// are re-encoded to JPEG in the browser before upload.
+async function toRekognitionFormat(file) {
+  if (file.type === "image/jpeg" || file.type === "image/png") return file;
+  const bitmap = await createImageBitmap(file);
+  const canvas = document.createElement("canvas");
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  canvas.getContext("2d").drawImage(bitmap, 0, 0);
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
+  const name = file.name.replace(/\.[^.]*$/, "") + ".jpg";
+  return new File([blob], name, { type: "image/jpeg" });
+}
+
+async function uploadPhoto(original, customLabels) {
+  const file = await toRekognitionFormat(original);
   const key = `${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
   const headers = {
     "Content-Type": file.type || "image/jpeg",
